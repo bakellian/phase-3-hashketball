@@ -1,3 +1,6 @@
+# https://learning.flatironschool.com/courses/4972/assignments/163793?module_item_id=352416
+
+require "pry"
 # Write your code below game_hash
 def game_hash
   {
@@ -126,4 +129,63 @@ def game_hash
   }
 end
 
-# Write code here
+#helper functions:
+
+def players 
+  game_hash[:home][:players].concat(game_hash[:away][:players]) 
+end
+
+def find_by_name(player_name)
+  players.find {|player_hash| player_hash[:player_name] == player_name}
+end
+
+def find_team(team_name)
+  team_info = game_hash.find do |location, team_data|
+    team_data[:team_name] == team_name
+  end
+  team_info[1]
+end
+
+#Methods
+
+def num_points_scored(player_name)
+  player = find_by_name(player_name)
+  return player[:points] if !!player
+end 
+
+def shoe_size(player_name)
+  player = find_by_name(player_name)
+  return player[:shoe] if !!player
+end
+
+def team_colors(team_name)
+  team = find_team(team_name)
+  team[:colors]
+end
+
+def team_names
+  game_hash.map do |location, team_data|
+    team_data[:team_name]
+  end 
+end
+
+def player_numbers(team_name)
+  team = find_team(team_name)
+  team[:players].map do |player|
+    player[:number]
+  end
+end
+
+def player_stats(player_name)
+  players.find do |player|
+    player[:player_name] == player_name
+  end
+end
+
+# rtrns number of rebounds of player with biggest shoe
+# 1. find player with biggest shoe shoe shoe size
+# 2. rtrn rebounds of that player
+def big_shoe_rebounds
+  player = players.max {|player1, player2| player1[:shoe] <=> player2[:shoe]} 
+  player[:rebounds]
+end 
